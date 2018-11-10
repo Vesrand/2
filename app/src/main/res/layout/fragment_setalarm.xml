@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="100">
+
+    <EditText
+        android:id="@+id/editText_label_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:enabled="true"
+        android:focusable="@bool/boolean_focusable"
+        android:clickable="@bool/boolean_focusable"
+        android:hint="@string/string_label_time"
+        android:inputType="none"
+        android:text="@string/string_label_time"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/button_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:contentDescription="@string/string_default_alarm_time"
+        android:text="@string/string_default_alarm_time"
+        android:textSize="50sp" />
+
+    <EditText
+        android:id="@+id/editText_label_days"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:focusable="@bool/boolean_focusable"
+        android:clickable="@bool/boolean_focusable"
+        android:hint="@string/string_label_days"
+        android:inputType="none"
+        android:text="@string/string_label_days" />
+
+    <GridView
+        android:id="@+id/gridView_days_setup"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:numColumns="10"
+        android:layout_weight="40" />
+
+    <EditText
+        android:id="@+id/editText_label_music"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:focusable="@bool/boolean_focusable"
+        android:clickable="@bool/boolean_focusable"
+        android:hint="@string/string_label_music"
+        android:inputType="none"
+        android:text="@string/string_label_music" />
+
+    <Spinner
+        android:id="@+id/spinner_music"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp" />
+
+    <EditText
+        android:id="@+id/editText_label_picture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:focusable="@bool/boolean_focusable"
+        android:clickable="@bool/boolean_focusable"
+        android:hint="@string/string_label_picture"
+        android:inputType="none"
+        android:text="@string/string_label_picture" />
+
+    <CheckBox
+        android:id="@+id/checkBox_picture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:text="@string/string_button_picture" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_setalarm_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/string_setalarm_cancel" />
+
+        <Button
+            android:id="@+id/button_setalarm_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/string_setalarm_submit" />
+    </LinearLayout>
+
+</LinearLayout>
