@@ -16,8 +16,9 @@ public class AlarmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_alarm);
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         textView = (TextView) findViewById(R.id.textViewMotivashka);
-//        receivedAlarmItem = getIntent().getParcelableExtra(MainActivity.INTENT_EXTRA_ALARM_ITEM);
-//        textView.setText(String.format("%d %s %s", receivedAlarmItem.mID, receivedAlarmItem.mTime, receivedAlarmItem.mDays));
+        Bundle bundle = getIntent().getBundleExtra(MainActivity.INTENT_EXTRA_ALARM_ITEM);
+        receivedAlarmItem = bundle.getParcelable(MainActivity.INTENT_EXTRA_ALARM_ITEM);
+        textView.setText(String.format("%d %s %s", receivedAlarmItem.mID, receivedAlarmItem.mTime, receivedAlarmItem.mDays));
         getSupportActionBar().hide();
     }
 

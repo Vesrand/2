@@ -278,28 +278,29 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Main
             dataBase.insert(DbAlarmContract.AlarmDaysEntry.TABLE_NAME, null, contentValuesDays);
         }
 
-        Intent alarmIntent = new Intent(this.getApplicationContext(), AlarmManagerBroadcastReceiver.class);
-//        Intent alarmIntent = new Intent(this.getApplicationContext(), AlarmActivity.class);
-//       TODO: alarmIntent.setAction();
-        alarmIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //перечитать тему на форуме урок 119, там ссылка на другую тему
-        alarmIntent.putExtra(INTENT_EXTRA_ALARM_ITEM, alarmItem); //список алармов - гуглить adb shell
-        PendingIntent pendingBroadcastIntent = PendingIntent.getBroadcast(this.getApplicationContext(), alarmItem.mID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-//        PendingIntent pendingActivityIntent = PendingIntent.getActivity(this.getApplicationContext(), alarmItem.mID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         String[] s = alarmItem.mTime.split(":");
         calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(s[0]));
         calendar.set(Calendar.MINUTE, Integer.parseInt(s[1]));
+        calendar.roll(Calendar.MINUTE, -1);
+
+        Intent alarmIntent = new Intent(this.getApplicationContext(), AlarmManagerBroadcastReceiver.class);
+//       TODO: alarmIntent.setAction();
+        alarmIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(INTENT_EXTRA_ALARM_ITEM, alarmItem);
+        alarmIntent.putExtra(INTENT_EXTRA_ALARM_ITEM, bundle);
+        PendingIntent pendingBroadcastIntent = PendingIntent.getBroadcast(this.getApplicationContext(), alarmItem.mID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         //TODO: надо добавить дни даже для единовременного будильника, иначе он воспримет меньшее значение времени как пропущенный и запустит сразу
-//        calendar.roll(Calendar.MINUTE, -1); //TODO: попробовать переставить время на телефоне, попробовать на реальном телефоне
+        //TODO: попробовать переставить время на телефоне, попробовать на реальном телефоне
         //TODO: flags here см. урок 119 и форум там же, и developer/Intent
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent);
         }else if (Build.VERSION.SDK_INT >= 19) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent); //список алармов - гуглить adb shell
         }else {
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent);
         }
-//        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingActivityIntent);
         //TODO: далее нотификация
     }
 
