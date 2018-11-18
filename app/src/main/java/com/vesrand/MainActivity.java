@@ -284,20 +284,18 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Main
         calendar.set(Calendar.SECOND, 0);
 //        calendar.roll(Calendar.MINUTE, -1);
 //        calendar.add(Calendar.MINUTE, -1);
-        if(calendar.getTimeInMillis() < System.currentTimeMillis()) {
+        if(calendar.getTimeInMillis() < (System.currentTimeMillis())) {
             calendar.roll(Calendar.DAY_OF_YEAR, 1);
 //            calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
 
         Intent alarmIntent = new Intent(this.getApplicationContext(), AlarmManagerBroadcastReceiver.class);
-//       TODO: alarmIntent.setAction();
         alarmIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         Bundle bundle = new Bundle();
         bundle.putParcelable(INTENT_EXTRA_ALARM_ITEM, alarmItem);
         alarmIntent.putExtra(INTENT_EXTRA_ALARM_ITEM, bundle);
-        //request code: на каждый день недели для одного аларма итема будет свой аларм со своим реквест кодом? или все же все алармы с одним реквестк кодом?
         //будем запускать каждый день и проверять в ресивере день
-        PendingIntent pendingBroadcastIntent = PendingIntent.getBroadcast(this.getApplicationContext(), alarmItem.mID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT); //TODO: после ребута пропадает при перезаписи, проверить id после ребута
+        PendingIntent pendingBroadcastIntent = PendingIntent.getBroadcast(this.getApplicationContext(), alarmItem.mID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         //TODO: попробовать переставить время на телефоне, попробовать на реальном телефоне
         //TODO: flags here см. урок 119 и форум там же, и developer/Intent
 
