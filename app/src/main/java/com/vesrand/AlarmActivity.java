@@ -20,6 +20,7 @@ public class AlarmActivity extends AppCompatActivity {
         receivedAlarmItem = bundle.getParcelable(MainActivity.INTENT_EXTRA_ALARM_ITEM);
         textView.setText(String.format("%d %s %s", receivedAlarmItem.mID, receivedAlarmItem.mTime, receivedAlarmItem.mDays));
         getSupportActionBar().hide();
+        //TODO: самый задний фон меняется в зависимости от месяца
     }
 
     @Override

@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Main
         mIsPortrait = isPortrait();
 
         if (mIsPortrait && savedInstanceState == null) {
-            getSupportActionBar().hide();//show();
+            getSupportActionBar().show();
             //подключаем сходу главный фрагмент
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             FragmentMain fragmentMain = new FragmentMain();
@@ -278,10 +278,16 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Main
             dataBase.insert(DbAlarmContract.AlarmDaysEntry.TABLE_NAME, null, contentValuesDays);
         }
 
-        String[] s = alarmItem.mTime.split(":");
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(s[0]));
-        calendar.set(Calendar.MINUTE, Integer.parseInt(s[1]));
-        calendar.roll(Calendar.MINUTE, -1);
+        String[] time = alarmItem.mTime.split(":");
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0]));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
+        calendar.set(Calendar.SECOND, 0);
+//        calendar.roll(Calendar.MINUTE, -1);
+//        calendar.add(Calendar.MINUTE, -1);
+        if(calendar.getTimeInMillis() < System.currentTimeMillis()) {
+            calendar.roll(Calendar.DAY_OF_YEAR, 1);
+//            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
 
         Intent alarmIntent = new Intent(this.getApplicationContext(), AlarmManagerBroadcastReceiver.class);
 //       TODO: alarmIntent.setAction();
@@ -289,18 +295,20 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Main
         Bundle bundle = new Bundle();
         bundle.putParcelable(INTENT_EXTRA_ALARM_ITEM, alarmItem);
         alarmIntent.putExtra(INTENT_EXTRA_ALARM_ITEM, bundle);
-        PendingIntent pendingBroadcastIntent = PendingIntent.getBroadcast(this.getApplicationContext(), alarmItem.mID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        //TODO: надо добавить дни даже для единовременного будильника, иначе он воспримет меньшее значение времени как пропущенный и запустит сразу
+        //request code: на каждый день недели для одного аларма итема будет свой аларм со своим реквест кодом? или все же все алармы с одним реквестк кодом?
+        //будем запускать каждый день и проверять в ресивере день
+        PendingIntent pendingBroadcastIntent = PendingIntent.getBroadcast(this.getApplicationContext(), alarmItem.mID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT); //TODO: после ребута пропадает при перезаписи, проверить id после ребута
         //TODO: попробовать переставить время на телефоне, попробовать на реальном телефоне
         //TODO: flags here см. урок 119 и форум там же, и developer/Intent
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent);
-        }else if (Build.VERSION.SDK_INT >= 19) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent); //список алармов - гуглить adb shell
-        }else {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent);
-        }
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingBroadcastIntent);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent);
+//        }else if (Build.VERSION.SDK_INT >= 19) {
+//            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent); //список алармов - гуглить adb shell
+//        }else {
+//            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent);
+//        }
         //TODO: далее нотификация
     }
 
@@ -331,6 +339,10 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Main
         dataBase.delete(DbAlarmContract.AlarmEntry.TABLE_NAME, DbAlarmContract.AlarmEntry._ID + " = ?", whereArgs);
         dataBase.delete(DbAlarmContract.AlarmDaysEntry.TABLE_NAME, DbAlarmContract.AlarmDaysEntry.COLUMN_ALARM_ID + " = ?",whereArgs);
 
+        Intent alarmIntent = new Intent(this.getApplicationContext(), AlarmManagerBroadcastReceiver.class);
+        alarmIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        PendingIntent pendingBroadcastIntent = PendingIntent.getBroadcast(this.getApplicationContext(), id, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        alarmManager.cancel(pendingBroadcastIntent);
     }
 
     @Override
@@ -339,7 +351,7 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Main
         ContentValues contentValues = new ContentValues();
         contentValues.put(DbAlarmContract.AlarmEntry.COLUMN_CHECKED, isEnabled ? 1 : 0);
         dataBase.update(DbAlarmContract.AlarmEntry.TABLE_NAME, contentValues, DbAlarmContract.AlarmEntry._ID + " = ?", whereArgs);
-        Toast.makeText(this, id + " " + isEnabled ,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, id + " " + isEnabled ,Toast.LENGTH_SHORT).show(); //TODO:remove me
 
     }
 
