@@ -29,4 +29,24 @@ public class DaysComparator implements Comparator<String> {
                 return 0; //тут добавим дни года
         }
     }
+    public static String intToDay(int dayNum){
+        switch (dayNum){
+            case 1:
+                return "Пн";
+            case 2:
+                return "Вт";
+            case 3:
+                return "Ср";
+            case 4:
+                return "Чт";
+            case 5:
+                return "Пт";
+            case 6:
+                return "Сб";
+            case 7:
+                return "Вс";
+            default:
+                return "0";
+        }
+    }
 }

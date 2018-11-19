@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Main
 
             fragmentTransaction.replace(R.id.container_main, fragmentDays);
             fragmentTransaction.commit();
+            //TODO: addToBackStack()
 
             getSupportActionBar().hide();
         } else {
@@ -192,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Main
 //методы работы с базой данных
 //вынесены отдельно исключительно для удобства чтения кода
     private void getDbIfo(){
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        SQLiteDatabase db = mDbHelper.getReadableDatabase(); //TODO: сюда и в ресивер единовременные события (с проверкой, что время еще не прошло)
         String[] projectionAlarm = {DbAlarmContract.AlarmEntry._ID,
                 DbAlarmContract.AlarmEntry.COLUMN_CHECKED,
                 DbAlarmContract.AlarmEntry.COLUMN_TIME,

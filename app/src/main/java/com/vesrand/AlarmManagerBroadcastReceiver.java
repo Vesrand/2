@@ -28,16 +28,25 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         bundle = intent.getBundleExtra(MainActivity.INTENT_EXTRA_ALARM_ITEM);
+        Calendar calendar = Calendar.getInstance();
         if (bundle != null){
             Log.d("alarmActivity", "bundle != null; trying to get parcelable and launch activity"); //TODO: remove me
             receivedAlarmItem = bundle.getParcelable(MainActivity.INTENT_EXTRA_ALARM_ITEM);
-            //TODO: проверяем дни недели, если пусто или сегодня совпадает с одним из дней в days, то запускаем
-            final Intent intentAlarmActivity = new Intent();
-            intentAlarmActivity.setClassName("com.vesrand", "com.vesrand.AlarmActivity");
-            intentAlarmActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intentAlarmActivity.putExtra(MainActivity.INTENT_EXTRA_ALARM_ITEM, bundle);
-            Log.d("alarmActivity", "receiver starts activity!"); //TODO: remove me
-            context.startActivity(intentAlarmActivity);
+            //проверяем дни недели, если пусто или сегодня совпадает с одним из дней в days, то запускаем
+            if (receivedAlarmItem != null) {
+                if ((receivedAlarmItem.mDays.size() == 0 || receivedAlarmItem.mDays.contains(DaysComparator.intToDay(calendar.get(Calendar.DAY_OF_WEEK)))) && receivedAlarmItem.mEnabled){
+                    Intent intentAlarmActivity = new Intent();
+                    intentAlarmActivity.setClassName("com.vesrand", "com.vesrand.AlarmActivity");
+                    intentAlarmActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intentAlarmActivity.putExtra(MainActivity.INTENT_EXTRA_ALARM_ITEM, bundle);
+                    Log.d("alarmActivity", "receiver starts activity!"); //TODO: remove me
+                    context.startActivity(intentAlarmActivity);
+                } else {
+                    Log.d("alarmActivity", "wrong day or disabled"); //TODO: remove me
+                }
+            }else {
+                Log.d("alarmActivity", "bundle != null but alarm item is null"); //TODO: remove me
+            }
         }else {
             Log.d("alarmActivity", "bundle is null; trying to read DB and recreate all alarms"); //TODO: remove me
             alarmList = new ArrayList<AlarmClass>();
@@ -109,7 +118,6 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
                 cursorDays.close();
             }
 
-            Calendar calendar = Calendar.getInstance();
             AlarmClass alarmItem;
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             PendingIntent pendingBroadcastIntent;
@@ -130,7 +138,12 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
                 alarmIntent.putExtra(MainActivity.INTENT_EXTRA_ALARM_ITEM, bundle);
                 //будем запускать каждый день и проверять в ресивере день
                 pendingBroadcastIntent = PendingIntent.getBroadcast(context, alarmItem.mID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-                alarmManager.cancel(pendingBroadcastIntent); //все отменяем и создаем заново, чтоб не было дубликатов
+                try {
+                    alarmManager.cancel(pendingBroadcastIntent); //все отменяем и создаем заново, чтоб не было дубликатов
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d("alarmActivity", "pending intent is null, cant cancel it /n" + e.toString());
+                }
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingBroadcastIntent);
             }
         }
