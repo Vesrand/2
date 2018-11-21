@@ -7,8 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 
 import com.vesrand.data.DbAlarmContract;
@@ -20,8 +20,8 @@ import java.util.Calendar;
 public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
     AlarmClass receivedAlarmItem;
     Bundle bundle;
-    private Handler handler = new Handler();
-    private long delay;
+//    private Handler handler = new Handler();
+//    private long delay;
     private ArrayList<AlarmClass> alarmList;
     private DbAlarmHelper mDbHelper;
 
@@ -46,6 +46,39 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
                 }
             }else {
                 Log.d("alarmActivity", "bundle != null but alarm item is null"); //TODO: remove me
+            }
+
+            //повторить будильник
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            PendingIntent pendingBroadcastIntent;
+            String[] time = receivedAlarmItem.mTime.split(":");
+            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0]));
+            calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
+            calendar.set(Calendar.SECOND, 0);
+            if(calendar.getTimeInMillis() < (System.currentTimeMillis())) {
+                calendar.roll(Calendar.DAY_OF_YEAR, 1);
+            }
+
+            Intent alarmIntent = new Intent(context, AlarmManagerBroadcastReceiver.class);
+            alarmIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Bundle tmpBundle = new Bundle();
+            tmpBundle.putParcelable(MainActivity.INTENT_EXTRA_ALARM_ITEM, receivedAlarmItem);
+            alarmIntent.putExtra(MainActivity.INTENT_EXTRA_ALARM_ITEM, tmpBundle);
+            //будем запускать каждый день и проверять в ресивере день
+            pendingBroadcastIntent = PendingIntent.getBroadcast(context, receivedAlarmItem.mID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            try {
+                alarmManager.cancel(pendingBroadcastIntent); //все отменяем и создаем заново, чтоб не было дубликатов
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d("alarmActivity", "pending intent is null, cant cancel it /n" + e.toString());
+            }
+//                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingBroadcastIntent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent);
+            }else if (Build.VERSION.SDK_INT >= 19) {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent); //список алармов - гуглить adb shell
+            }else {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent);
             }
         }else {
             Log.d("alarmActivity", "bundle is null; trying to read DB and recreate all alarms"); //TODO: remove me
@@ -133,9 +166,9 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 
                 Intent alarmIntent = new Intent(context, AlarmManagerBroadcastReceiver.class);
                 alarmIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(MainActivity.INTENT_EXTRA_ALARM_ITEM, alarmItem);
-                alarmIntent.putExtra(MainActivity.INTENT_EXTRA_ALARM_ITEM, bundle);
+                Bundle tmpBundle = new Bundle();
+                tmpBundle.putParcelable(MainActivity.INTENT_EXTRA_ALARM_ITEM, alarmItem);
+                alarmIntent.putExtra(MainActivity.INTENT_EXTRA_ALARM_ITEM, tmpBundle);
                 //будем запускать каждый день и проверять в ресивере день
                 pendingBroadcastIntent = PendingIntent.getBroadcast(context, alarmItem.mID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
                 try {
@@ -144,7 +177,14 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
                     e.printStackTrace();
                     Log.d("alarmActivity", "pending intent is null, cant cancel it /n" + e.toString());
                 }
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingBroadcastIntent);
+//                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingBroadcastIntent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent);
+                }else if (Build.VERSION.SDK_INT >= 19) {
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent); //список алармов - гуглить adb shell
+                }else {
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent);
+                }
             }
         }
 

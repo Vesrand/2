@@ -76,6 +76,7 @@ public class FragmentSetAlarm extends Fragment implements View.OnClickListener{
                 setGridViewDaysSetup();
             }else{
                 alarmItem = new AlarmClass();
+                checkBoxPicture.setChecked(alarmItem.mMotivashka);
                 isNewAlarm = true;
             }
         } catch (NullPointerException e) {
@@ -83,7 +84,7 @@ public class FragmentSetAlarm extends Fragment implements View.OnClickListener{
             alarmItem = new AlarmClass();
             isNewAlarm = true;
         }
-        if (true) {
+        if (true) { //TODO: сюда пишем последнюю 3 строчку спиннера
             listForSpinner.add(MusicSpinnerAdapter.SPINNER_TITTLE_ITEM2_SUBITEM);
         } else {//мелодия по умолчанию
         }
@@ -101,7 +102,7 @@ public class FragmentSetAlarm extends Fragment implements View.OnClickListener{
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 alarmItem.mMusicSource = position;
                 if (!skipSpinnerSelectedAction) {
-                    //тут будет диалог
+                    //TODO: тут будет диалог
                 }
                 skipSpinnerSelectedAction = false;
             }
@@ -137,7 +138,7 @@ public class FragmentSetAlarm extends Fragment implements View.OnClickListener{
 //    @Override
 //    public void onSaveInstanceState(@NonNull Bundle outState) {
 //        super.onSaveInstanceState(outState);
-//        outState.putString("","");    //НЕ ЗАБЫТЬ ДОДЕЛАТЬ!!!!!!!!!!!!!!!
+//        outState.putString("","");
 //    }
 
 

@@ -300,15 +300,16 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Main
         //TODO: попробовать переставить время на телефоне, попробовать на реальном телефоне
         //TODO: flags here см. урок 119 и форум там же, и developer/Intent
 
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingBroadcastIntent);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent);
-//        }else if (Build.VERSION.SDK_INT >= 19) {
-//            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent); //список алармов - гуглить adb shell
-//        }else {
-//            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent);
-//        }
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingBroadcastIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent);
+        }else if (Build.VERSION.SDK_INT >= 19) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent); //список алармов - гуглить adb shell
+        }else {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent);
+        }
         //TODO: далее нотификация
+        //TODO: gridView трудное нажатие в setAlarmFragment'e и в столбец буквы в listView
     }
 
     private void changeDbItem(@NonNull AlarmClass alarmItem){

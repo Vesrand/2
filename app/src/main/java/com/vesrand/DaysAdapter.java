@@ -56,7 +56,7 @@ private Context mContext;
             label = (TextView) convertView;
         }
         label.setText((CharSequence) days.get(position));
-        label.setTextSize(20);
+        label.setTextSize(10); //TODO: тут вся настройка gridView для days, можно подобрать шрифт или сделать картинки или еще что-то
         label.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         return convertView;
