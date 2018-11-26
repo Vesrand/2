@@ -74,7 +74,7 @@ public class FragmentDays extends Fragment implements View.OnClickListener{
         daysAdapter = new DaysAdapter(getContext(), android.R.layout.simple_list_item_1, predefinedDays);
         gridView.setAdapter(daysAdapter);
 
-        calendarView.setVisibility(View.GONE); //до лучших времен
+        calendarView.setVisibility(View.GONE); //TODO: до лучших времен
 
         return rootView;
     }

@@ -10,9 +10,10 @@
     <string name="string_label_picture">Изображение</string>
     <string name="string_button_picture">Утренняя мотивашка</string>
     <string name="string_days_label">Дни:</string>
-    <string name="string_days_button_default">Один раз, в ближайшее время</string>
+    <string name="string_days_button_default">Каждый день</string>
     <string name="string_menu_item_1">Мелодия по умолчанию</string>
     <string name="string_setalarm_submit">ОК</string>
     <string name="string_setalarm_cancel">Отмена</string>
     <string name="string_button_close">Закрыть</string>
+    <string name="string_days_note">Примечание: если не отмечен ни один день, будильник срабатывает каждый день.</string>
 </resources>

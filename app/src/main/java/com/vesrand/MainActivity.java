@@ -309,7 +309,6 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Main
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingBroadcastIntent);
         }
         //TODO: далее нотификация
-        //TODO: gridView трудное нажатие в setAlarmFragment'e и в столбец буквы в listView
     }
 
     private void changeDbItem(@NonNull AlarmClass alarmItem){
@@ -329,7 +328,25 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Main
             contentValuesDays.put(DbAlarmContract.AlarmDaysEntry.COLUMN_DAYS, alarmItem.mDays.get(i));
             dataBase.insert(DbAlarmContract.AlarmDaysEntry.TABLE_NAME, null, contentValuesDays);
         }
-
+        //удаляем старый
+        Intent oldAlarmIntent = new Intent(this.getApplicationContext(), AlarmManagerBroadcastReceiver.class);
+        oldAlarmIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        PendingIntent oldPendingBroadcastIntent = PendingIntent.getBroadcast(this.getApplicationContext(), alarmItem.mID, oldAlarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        alarmManager.cancel(oldPendingBroadcastIntent);
+        //создаем новый
+        Intent newAlarmIntent = new Intent(this.getApplicationContext(), AlarmManagerBroadcastReceiver.class);
+        newAlarmIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(INTENT_EXTRA_ALARM_ITEM, alarmItem);
+        newAlarmIntent.putExtra(INTENT_EXTRA_ALARM_ITEM, bundle);
+        PendingIntent newPendingBroadcastIntent = PendingIntent.getBroadcast(this.getApplicationContext(), alarmItem.mID, newAlarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), newPendingBroadcastIntent);
+        }else if (Build.VERSION.SDK_INT >= 19) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), newPendingBroadcastIntent);
+        }else {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), newPendingBroadcastIntent);
+        }
     }
 
 //методы интерфейса для адаптера ListView
@@ -351,7 +368,7 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Main
         ContentValues contentValues = new ContentValues();
         contentValues.put(DbAlarmContract.AlarmEntry.COLUMN_CHECKED, isEnabled ? 1 : 0);
         dataBase.update(DbAlarmContract.AlarmEntry.TABLE_NAME, contentValues, DbAlarmContract.AlarmEntry._ID + " = ?", whereArgs);
-        Toast.makeText(this, id + " " + isEnabled ,Toast.LENGTH_SHORT).show(); //TODO:remove me
+//        Toast.makeText(this, id + " " + isEnabled ,Toast.LENGTH_SHORT).show(); //TODO:remove me
 
     }
 

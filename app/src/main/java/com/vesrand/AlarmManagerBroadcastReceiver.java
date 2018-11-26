@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.vesrand.data.DbAlarmContract;
 import com.vesrand.data.DbAlarmHelper;
@@ -45,7 +46,8 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
                     Log.d("alarmActivity", "wrong day or disabled"); //TODO: remove me
                 }
             }else {
-                Log.d("alarmActivity", "bundle != null but alarm item is null"); //TODO: remove me
+                Log.d("alarmActivity", "bundle != null but alarm item is null, trying to identify event"); //TODO: remove me
+                //TODO: тут обработка эвента с поздравлением
             }
 
             //повторить будильник
@@ -70,7 +72,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
                 alarmManager.cancel(pendingBroadcastIntent); //все отменяем и создаем заново, чтоб не было дубликатов
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.d("alarmActivity", "pending intent is null, cant cancel it /n" + e.toString());
+                Log.d("alarmActivity", "pending intent is null, cant cancel it /n" + e.toString());//TODO: remove me
             }
 //                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingBroadcastIntent);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -201,7 +203,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 //                context.startActivity(intentAlarmActivity);
 //            }
 //        }, delay);
-    }//TODO: 1-перезапуск после выключения, 2-дни недели и прочие настройки(см закладки), 3-все действия(удаление, изменение, выключение)
+    }
 
 
 }

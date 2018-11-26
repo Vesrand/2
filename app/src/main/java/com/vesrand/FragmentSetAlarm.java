@@ -15,8 +15,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.vesrand.data.DbAlarmContract;
 
@@ -31,6 +31,7 @@ public class FragmentSetAlarm extends Fragment implements View.OnClickListener{
     private Spinner spinnerMusic;
     private CheckBox checkBoxPicture;
     private DaysAdapter daysAdapter;
+    private TextView labelMusic;
 
     SetAlarmClickedInterface setAlarmClickedInterface;
     public static final String BUNDLE_KEY_ALARM = "alarm";
@@ -57,6 +58,9 @@ public class FragmentSetAlarm extends Fragment implements View.OnClickListener{
         gridViewDaysSetup= (GridView) rootView.findViewById(R.id.gridView_days_setup);
         spinnerMusic = (Spinner) rootView.findViewById(R.id.spinner_music);
         checkBoxPicture = (CheckBox) rootView.findViewById(R.id.checkBox_picture);
+        labelMusic = (TextView) rootView.findViewById(R.id.editText_label_music);
+        labelMusic.setVisibility(View.GONE); //TODO: до лучших времен
+        spinnerMusic.setVisibility(View.GONE);
 
         List<String> listForSpinner = new ArrayList<String>();
         listForSpinner.add(MusicSpinnerAdapter.SPINNER_TITTLE_ITEM1_SUBITEM);
@@ -84,6 +88,13 @@ public class FragmentSetAlarm extends Fragment implements View.OnClickListener{
             alarmItem = new AlarmClass();
             isNewAlarm = true;
         }
+
+
+//        if (alarmItem.mDays.size() == 0){
+//            gridViewDaysSetup.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 40));
+//        }else {
+//            gridViewDaysSetup.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+//        }
         if (true) { //TODO: сюда пишем последнюю 3 строчку спиннера
             listForSpinner.add(MusicSpinnerAdapter.SPINNER_TITTLE_ITEM2_SUBITEM);
         } else {//мелодия по умолчанию
@@ -92,6 +103,7 @@ public class FragmentSetAlarm extends Fragment implements View.OnClickListener{
         spinnerMusic.setAdapter(musicSpinnerAdapter);
         skipSpinnerSelectedAction = true;
         spinnerMusic.setSelection(alarmItem.mMusicSource);
+
 
         //listener блок
         buttonTime.setOnClickListener(this);
@@ -190,7 +202,7 @@ public class FragmentSetAlarm extends Fragment implements View.OnClickListener{
         setAlarmClickedInterface.gridviewDaysClicked(alarmItem);
     }
     private void onClickSetMusic(){
-//СЮДА ДОПИСАТЬ ВЫБОР!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//TODO: тут выбор, проверить что alarmItem меняется
     }
     private void onClickCheckMotivation(){
 

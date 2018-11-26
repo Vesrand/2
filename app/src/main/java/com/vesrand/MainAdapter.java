@@ -64,6 +64,11 @@ public class MainAdapter extends ArrayAdapter {
             holder.textViewAlarmTime.setText(alarmItem.mTime);
             DaysAdapter daysAdapter = new DaysAdapter(mContext, android.R.layout.simple_list_item_1, alarmItem.mDays);
             holder.gridViewDays.setAdapter(daysAdapter);
+            if (mObjects.size() == 7) {
+                holder.gridViewDays.setNumColumns(7);
+            }else{
+                holder.gridViewDays.setNumColumns(6);
+            }
             holder.imageButtonDelete.setTag(position);
             holder.gridViewDays.setTag(position);
             holder.textViewAlarmTime.setTag(position);

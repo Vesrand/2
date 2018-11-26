@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:weightSum="100">
 
     <EditText
         android:id="@+id/editText_label_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="@bool/boolean_focusable"
         android:ems="10"
         android:enabled="true"
         android:focusable="@bool/boolean_focusable"
-        android:clickable="@bool/boolean_focusable"
         android:hint="@string/string_label_time"
         android:inputType="none"
         android:text="@string/string_label_time"
@@ -30,8 +31,8 @@
         android:id="@+id/button_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
         android:contentDescription="@string/string_default_alarm_time"
         android:text="@string/string_default_alarm_time"
         android:textSize="50sp" />
@@ -40,14 +41,14 @@
         android:id="@+id/editText_label_days"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="0dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="0dp"
+        android:clickable="@bool/boolean_focusable"
         android:ems="10"
         android:focusable="@bool/boolean_focusable"
-        android:clickable="@bool/boolean_focusable"
         android:hint="@string/string_label_days"
         android:inputType="none"
         android:text="@string/string_label_days" />
@@ -55,24 +56,28 @@
     <GridView
         android:id="@+id/gridView_days_setup"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_weight="40"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="0dp"
         android:background="@android:drawable/alert_light_frame"
-        android:numColumns="10" />
+        android:foregroundGravity="center"
+        android:gravity="center"
+        android:numColumns="7"
+        android:scrollbars="none"
+        tools:layout_height="50dp" />
 
     <EditText
         android:id="@+id/editText_label_music"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="@bool/boolean_focusable"
         android:ems="10"
         android:focusable="@bool/boolean_focusable"
-        android:clickable="@bool/boolean_focusable"
         android:hint="@string/string_label_music"
         android:inputType="none"
         android:text="@string/string_label_music" />
@@ -81,21 +86,21 @@
         android:id="@+id/spinner_music"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginBottom="8dp" />
 
     <EditText
         android:id="@+id/editText_label_picture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="0dp"
+        android:clickable="@bool/boolean_focusable"
         android:ems="10"
         android:focusable="@bool/boolean_focusable"
-        android:clickable="@bool/boolean_focusable"
         android:hint="@string/string_label_picture"
         android:inputType="none"
         android:text="@string/string_label_picture" />
@@ -104,9 +109,9 @@
         android:id="@+id/checkBox_picture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/string_button_picture" />
 
     <LinearLayout
