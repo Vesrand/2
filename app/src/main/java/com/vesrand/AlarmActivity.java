@@ -60,10 +60,14 @@ public class AlarmActivity extends AppCompatActivity implements MediaPlayer.OnCo
 
     @Override
     protected void onDestroy() {
-        wakeLock.release();
-        mMediaPlayer.stop();
+        try {
+            wakeLock.release();
+            mMediaPlayer.stop();
+            releaseMP();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
         super.onDestroy();
-        releaseMP();
 //        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
@@ -75,7 +79,6 @@ public class AlarmActivity extends AppCompatActivity implements MediaPlayer.OnCo
     }
 
     public void onClick(View view) {
-        wakeLock.release();
         finish();
     }
 
